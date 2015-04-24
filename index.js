@@ -1,13 +1,15 @@
 'use strict';
 
 var Twig = require('twig'),
-	twig = Twig.twig,
 	_ = require('lodash'),
 	glob = require('glob'),
 	fs = require('fs'),
 	through = require('through2'),
-	util = require('gulp-util'),
-	pluginName = 'gulp-twig';
+	util = require('gulp-util');
+
+var pluginName = 'gulp-twig',
+	twig = Twig.twig,
+	includeCache = {};
 
 module.exports = function(options) {
 	options = _.merge({
@@ -29,7 +31,17 @@ module.exports = function(options) {
 		options.includes.forEach(function(pattern) {
 			glob.sync(pattern).forEach(function(file) {
 				var id = options.getIncludeId(file),
-					content = fs.readFileSync(file, 'utf8').toString();
+					changed = fs.statSync(file).mtime,
+					content;
+
+				// Skip registering if include has not changed since last time
+				if (includeCache[id] && includeCache[id].getTime() === changed.getTime()) {
+					return;
+				}
+
+				includeCache[id] = changed;
+
+				content = fs.readFileSync(file, 'utf8').toString();
 
 				twig({
 					id: id,

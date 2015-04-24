@@ -21,7 +21,7 @@
     "gulp-util": "^3.0.4",
     "lodash": "^3.7.0",
     "through2": "^0.6.5",
-    "twig": "^0.8.2"
+    "twig": "git+https://github.com/backflip/twig.js.git"
   },
   "devDependencies": {}
 }

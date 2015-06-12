@@ -1,6 +1,6 @@
 {
   "name": "gulp-twig",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Compile twig.js templates",
   "license": "MIT",
   "repository": "backflip/gulp-twig",

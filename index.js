@@ -73,7 +73,7 @@ module.exports = function(options) {
 		try {
 			file.contents = new Buffer(template.render(data));
 		} catch(err) {
-			this.emit('error', new util.PluginError(pluginName, file.path, err));
+			this.emit('error', new util.PluginError(pluginName, err));
 
 			return cb();
 		}

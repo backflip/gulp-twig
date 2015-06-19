@@ -17,7 +17,8 @@ module.exports = function(options) {
 		includes: null,
 		getIncludeId: function(filePath) {
 			return filePath;
-		}
+		},
+		precompile: false
 	}, options || {});
 
 	Twig.cache(false);
@@ -68,10 +69,17 @@ module.exports = function(options) {
 			template = twig({
 				allowInlineIncludes: true,
 				data: file.contents.toString()
-			});
+			}),
+			content;
 
 		try {
-			file.contents = new Buffer(template.render(data));
+			if (options.precompile) {
+				content = JSON.stringify(template.tokens);
+			} else {
+				content = template.render(data);
+			}
+
+			file.contents = new Buffer(content);
 		} catch(err) {
 			this.emit('error', new util.PluginError(pluginName, err));
 
